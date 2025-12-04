@@ -8,7 +8,7 @@ class Program
     {
         Console.Clear();
 
-        var conta = new Conta("teste", "11111111111", 0);
+        var conta = new Conta("teste", "11111111111");
 
         var erros = conta.IsValid();
 
