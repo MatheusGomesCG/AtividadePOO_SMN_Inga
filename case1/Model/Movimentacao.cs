@@ -4,14 +4,15 @@ namespace case1.Model;
 
 public class Movimentacao
 {
+    public int IdConta { get; }
     public TipoMovimentacao Tipo { get; }
-
     public decimal Valor { get; }
     public DateTime Data { get; }
     public bool EfetuadaComSucesso { get; }
 
-    public Movimentacao(TipoMovimentacao tipo, decimal valor, bool efetuadaComSucesso)
+    public Movimentacao(int idConta, TipoMovimentacao tipo, decimal valor, bool efetuadaComSucesso)
     {
+        IdConta = idConta;
         Tipo = tipo;
         Valor = valor;
         Data = DateTime.Now;
@@ -20,8 +21,7 @@ public class Movimentacao
 
     public override string ToString()
     {
-        var tipo = Tipo == TipoMovimentacao.Deposito ? "Depósito" : "Saque";
         var efetuadaComSucesso = EfetuadaComSucesso ? "Sim" : "Não";
-        return $"Tipo: {tipo}, Valor: {Valor:C}, Data: {Data:dd/MM/yyyy}, Sucesso: {efetuadaComSucesso}";
+        return $"IdConta: {IdConta}, Tipo: {Tipo}, Valor: {Valor:C}, Data: {Data:dd/MM/yyyy}, Sucesso: {efetuadaComSucesso}";
     }
 }

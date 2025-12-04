@@ -8,28 +8,37 @@ namespace case1.Model;
 public class Conta
 
 {
-    private decimal _saldo;
+    public int Id { get; }
+    public int IdConta { get; }
+    public decimal Saldo { get; private set; }
     public string Titular { get; }
     public string CPF { get; }
 
     public List<Movimentacao> Movimentacoes { get; }
 
-    public Conta(string titular, string cpf)
+    public Conta(int id, int idConta, string titular, string cpf)
     {
-        if (string.IsNullOrWhiteSpace(titular))
-        {
-            Console.WriteLine("Titular não pode ser vazio.");
-            return;
-        }
-        if (!CPFValido(cpf))
-        {
-            Console.WriteLine("CPF inválido.");
-            return;
-        }
+        Id = id;
+        IdConta = idConta;
         Titular = titular;
         CPF = cpf;
-        _saldo = 0;
+        Saldo = 0;
         Movimentacoes = new List<Movimentacao>();
+    }
+
+    public bool isValido()
+    {
+        if (string.IsNullOrWhiteSpace(Titular))
+        {
+            Console.WriteLine("Titular não pode ser vazio.");
+            return false;
+        }
+        if (!CPFValido(CPF))
+        {
+            Console.WriteLine("CPF inválido.");
+            return false;
+        }
+        return true;
     }
 
     private bool CPFValido(string cpf)
@@ -39,51 +48,52 @@ public class Conta
     }
 
 
-    public decimal Saldo()
+    public decimal ExibirSaldo()
     {
-        return _saldo;
+        return Saldo;
     }
 
     public void Depositar(decimal valor)
     {
-        if (!PodeRealizar(TipoMovimentacao.Deposito, valor))
-        {
+        var sucesso = PodeRealizar(TipoMovimentacao.Deposito, valor);
+        Movimentacoes.Add(new Movimentacao(IdConta, TipoMovimentacao.Deposito, valor, sucesso));
+        if (!sucesso)
             return;
-        }
-        _saldo += valor;
-        Movimentacoes.Add(new Movimentacao(TipoMovimentacao.Deposito, valor, true));
+
+        Saldo += valor;
         Console.WriteLine($"Depósito de {valor} realizado com sucesso.");
     }
 
     public void Sacar(decimal valor)
     {
-        if (!PodeRealizar(TipoMovimentacao.Saque, valor))
-        {
+        var sucesso = PodeRealizar(TipoMovimentacao.Saque, valor);
+        Movimentacoes.Add(new Movimentacao(IdConta, TipoMovimentacao.Saque, valor, sucesso));
+        if (!sucesso)
             return;
-        }
-        _saldo -= valor;
-        Movimentacoes.Add(new Movimentacao(TipoMovimentacao.Saque, valor, true));
+
+        Saldo -= valor;
         Console.WriteLine($"Saque de {valor} realizado com sucesso.");
     }
 
     private bool PodeRealizar(TipoMovimentacao tipo, decimal valor)
     {
-        if (tipo == TipoMovimentacao.Saque && valor > _saldo && valor > 0)
+        if (tipo == TipoMovimentacao.Saque && valor > Saldo && valor > 0)
         {
             Console.WriteLine("Saldo insuficiente para realizar o saque.");
-            Movimentacoes.Add(new Movimentacao(tipo, valor, false));
             return false;
         }
         if (tipo == TipoMovimentacao.Deposito && valor <= 0)
         {
             Console.WriteLine("Valor de depósito inválido.");
-            Movimentacoes.Add(new Movimentacao(tipo, valor, false));
             return false;
         }
         return true;
     }
     public string ExibirExtrato()
     {
+        if (!Movimentacoes.Any())
+            return "Nenhuma movimentação realizada.";
+
         var extrato = Movimentacoes.OrderByDescending(m => m.Valor).ToList();
         StringBuilder sb = new StringBuilder();
         sb.AppendLine("Extrato da Conta:");
@@ -96,10 +106,12 @@ public class Conta
 
     public string ExtratoPorTipo()
     {
+        if (!Movimentacoes.Any())
+            return "Nenhuma movimentação realizada.";
+
         var movimentacoesPorTipo = Movimentacoes
             .GroupBy(m => m.Tipo)
             .ToDictionary(g => g.Key, g => g.ToList());
-
         var sb = new StringBuilder();
         sb.AppendLine("Extrato agrupado");
         foreach (var tipo in movimentacoesPorTipo.Keys)
