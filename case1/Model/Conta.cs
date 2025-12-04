@@ -9,17 +9,17 @@ public class Conta
 
 {
     public int Id { get; }
-    public int IdConta { get; }
+    public int NumerConta { get; }
     public decimal Saldo { get; private set; }
     public string Titular { get; }
     public string CPF { get; }
 
     public List<Movimentacao> Movimentacoes { get; }
 
-    public Conta(int id, int idConta, string titular, string cpf)
+    public Conta(int id, int numeroConta, string titular, string cpf)
     {
         Id = id;
-        IdConta = idConta;
+        NumerConta = numeroConta;
         Titular = titular;
         CPF = cpf;
         Saldo = 0;
@@ -56,7 +56,7 @@ public class Conta
     public void Depositar(decimal valor)
     {
         var sucesso = PodeRealizar(TipoMovimentacao.Deposito, valor);
-        Movimentacoes.Add(new Movimentacao(IdConta, TipoMovimentacao.Deposito, valor, sucesso));
+        Movimentacoes.Add(new Movimentacao(NumerConta, TipoMovimentacao.Deposito, valor, sucesso));
         if (!sucesso)
             return;
 
@@ -67,7 +67,7 @@ public class Conta
     public void Sacar(decimal valor)
     {
         var sucesso = PodeRealizar(TipoMovimentacao.Saque, valor);
-        Movimentacoes.Add(new Movimentacao(IdConta, TipoMovimentacao.Saque, valor, sucesso));
+        Movimentacoes.Add(new Movimentacao(NumerConta, TipoMovimentacao.Saque, valor, sucesso));
         if (!sucesso)
             return;
 
@@ -112,6 +112,7 @@ public class Conta
         var movimentacoesPorTipo = Movimentacoes
             .GroupBy(m => m.Tipo)
             .ToDictionary(g => g.Key, g => g.ToList());
+
         var sb = new StringBuilder();
         sb.AppendLine("Extrato agrupado");
         foreach (var tipo in movimentacoesPorTipo.Keys)
@@ -124,8 +125,6 @@ public class Conta
                 sb.AppendLine(movimentacao.ToString());
             }
         }
-
-
         return sb.ToString();
     }
 }
