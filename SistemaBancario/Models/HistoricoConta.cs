@@ -16,5 +16,4 @@ public class HistoricoConta
         Valor = valor;
         Sucesso = sucesso;
     }
-
 }

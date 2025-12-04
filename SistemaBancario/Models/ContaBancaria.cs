@@ -51,6 +51,7 @@ public class ContaBancaria
             Console.WriteLine($"O Valor: {valor:C} é maior que o saldo disponível: {Saldo:C}.");
             return;
         }
+        
         Saldo -= valor;
     }
 
