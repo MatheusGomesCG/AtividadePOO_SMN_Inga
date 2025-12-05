@@ -14,9 +14,10 @@ public abstract class Pagamento(decimal valorTotal) : IPagamento
 
     public decimal CalcularValorComTaxa() => ValorTotal + (ValorTotal * Taxa);
 
-    public void FinalizarPagamento()
+    public void FinalizarPagamento() => Status = PagamentoStatusEnum.Finalizado;
+
+    public void Extrato()
     {
-        Status = PagamentoStatusEnum.Finalizado;
         StringBuilder sb = new();
         sb.AppendLine("Extrato do Pagamento:");
         sb.AppendLine($"- Método de Pagamento: {MetodoPagamento}");
