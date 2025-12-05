@@ -4,11 +4,10 @@ namespace case2._1.Model;
 
 public class Pagamento
 {
-    public int IdFuncionario { get; set; }
-    
-    public Funcionario Funcionario { get; set; }
-    public decimal Valor { get; set; }
-    public DateTime DataPagamento { get; set; }
+    public int IdFuncionario { get; }
+    public Funcionario Funcionario { get; }
+    public decimal Valor { get; }
+    public DateTime DataPagamento { get; }
 
     public Pagamento(Funcionario funcionario, decimal valor, DateTime dataPagamento)
     {

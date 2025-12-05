@@ -4,13 +4,18 @@ namespace case2._1.Model;
 
 public class Empresa
 {
-    public List<Funcionario> Funcionarios { get; set; }
+    public List<Funcionario> Funcionarios { get; }
 
     public void AdicionarFuncionario(Funcionario funcionario)
     {
-        if (!funcionario.IsValid())
+        var funcionarioValido = funcionario.IsValid();
+
+        if (funcionarioValido.Any())
         {
-            Console.WriteLine("Dados do funcionário inválidos.");
+            foreach (var erro in funcionarioValido)
+            {
+                Console.WriteLine($"{erro}");
+            }
             return;
         }
         Funcionarios.Add(funcionario);
@@ -35,8 +40,6 @@ public class Empresa
         }
         return funcionarios;
     }
-    private List<Funcionario> FuncionariosOrdenadosPorSalario()
-    {
-        return Funcionarios.OrderByDescending(f => f.CalcularSalarioLiquido()).ToList();
-    }
-} 
+    private List<Funcionario> FuncionariosOrdenadosPorSalario() =>Funcionarios.OrderByDescending(f => f.CalcularSalarioLiquido()).ToList();
+
+}

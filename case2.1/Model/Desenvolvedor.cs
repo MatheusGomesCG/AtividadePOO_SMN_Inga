@@ -7,10 +7,7 @@ public class Desenvolvedor : Funcionario
     {
     }
 
-    public override TipoFuncionario Tipo  => TipoFuncionario.Desenvolvedor;
+    public override TipoFuncionario Tipo => TipoFuncionario.Desenvolvedor;
     public override decimal TaxaBonus => 0.10m;
-    public override decimal CalcularBonus()
-    {
-        return SalarioBase * TaxaBonus;
-    }
+
 }
