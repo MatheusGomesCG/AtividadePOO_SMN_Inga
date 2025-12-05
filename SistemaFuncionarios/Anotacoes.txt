@@ -1,0 +1,1 @@
+Inves de criar service e repository, criar uma classe empresa e simular as operacoes na Empresa, Banco e tudo.
