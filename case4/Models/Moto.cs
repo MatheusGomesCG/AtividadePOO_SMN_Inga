@@ -2,25 +2,20 @@ using case4.Enum;
 
 namespace case4.Models;
 
-public class Moto : Veiculo
+public class Moto(string nome, string marca, int ano, int cilindradas) : Veiculo(nome, marca, ano)
 {
-    public int Cilindradas { get;}
+    public int Cilindradas { get; } = cilindradas;
     public override TipoVeiculoEnum TipoVeiculo => TipoVeiculoEnum.Moto;
 
-    public Moto(string nome, string marca, int ano, int cilindradas) : base(nome, marca, ano)
-    {
-        Cilindradas = cilindradas;
-    }
-    public override decimal CalcularConsumoCombustivel()
-    {
-        return 40000 / Cilindradas;
-    }
+    public override decimal CalcularConsumoCombustivel() => 40000 / Cilindradas;
 
-    public override (List<string>, bool) IsValid()
+    public override List<string> IsValid()
     {
-        (List<string> erros, bool isValid) = base.IsValid();
+        var erros = base.IsValid();
+
         if (Cilindradas <= 0)
             erros.Add("As cilindradas da moto devem ser maiores que zero.");
-        return (erros, erros.Count == 0);
+
+        return erros;
     }
 }

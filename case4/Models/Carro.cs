@@ -2,23 +2,20 @@ using case4.Enum;
 
 namespace case4.Models;
 
-public class Carro : Veiculo
+public class Carro(string nome, string marca, int ano, int numeroPortas) : Veiculo(nome, marca, ano)
 {
-    public int NumeroPortas { get; }
+    public int NumeroPortas { get; } = numeroPortas;
     public override TipoVeiculoEnum TipoVeiculo => TipoVeiculoEnum.Carro;
-    public Carro(string nome, string marca, int ano, int numeroPortas) : base(nome, marca, ano)
+
+    public override decimal CalcularConsumoCombustivel() => 16 - NumeroPortas;
+    
+    public override List<string> IsValid()
     {
-        NumeroPortas = numeroPortas;
-    }
-    public override decimal CalcularConsumoCombustivel()
-    {
-        return 16 - NumeroPortas;
-    }
-    public override (List<string>, bool) IsValid()
-    {
-        (List<string> erros, bool isValid) = base.IsValid();
+        var erros = base.IsValid();
+
         if (NumeroPortas <= 0)
             erros.Add("O número de portas do carro deve ser maior que zero.");
-        return (erros, erros.Count == 0);
+
+        return erros;
     }
 }

@@ -4,18 +4,14 @@ using case3.Interface;
 
 namespace case3.Models;
 
-public abstract class Pagamento : IPagamento
+public abstract class Pagamento(decimal valor) : IPagamento
 {
     public abstract decimal Taxa { get; }
     public abstract TimeSpan TempoProcessamento { get; }
     public abstract TipoPagamentoEnum Tipo { get; }
     public PagamentoStatusEnum Status { get; private set; } = PagamentoStatusEnum.Pendente;
-    public decimal Valor { get; }
+    public decimal Valor { get; } = valor;
 
-    public Pagamento(decimal valor)
-    {
-        Valor = valor;
-    }
     public decimal CalcularValorComTaxa(decimal valor) => valor + (valor * Taxa);
 
     public void FinalizarPagamento() => Status = PagamentoStatusEnum.Finalizado;
